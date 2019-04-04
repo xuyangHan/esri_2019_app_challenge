@@ -79,78 +79,41 @@ require([
 });
 
 function loadCSV() {
-    d3.csv("static/CSV/2019ratings.csv", function(error, data) {
-
-        // returns whole column
-        //var yearData = data.map(function(d) { return d.YEAR });
-        //var makeData = data.map(function(d) { return d.MAKE });
-        //var modelData = data.map(function(d) { return d.MODEL });
-
+    d3.csv("static/CSV/carfuelrating.csv", function(error, data) {
 
         updateCarYearSelection(data);
         var filteredData = updateCarMakeSelection(data, false);
-        filteredData = updateCarModelSelection(filteredData, false);
+        var selectedCar = updateCarModelSelection(filteredData, false);
 
         // TODO update view here
+        //console.log(selectedCar);
     });
-    /*
-    d3.csv("/static/CSV/2019ratings.csv", function(d) {
-        return {
-            //city : d.city,
-            //             //state : d.state,
-            //             //population : +d.population,
-            //             //land_area : +d["land area"]
-            model_year : d['Year']
-        };
-    }).then(function(data) {
-        //data.forEach(function(d) {
-        //    d.population = +d.population;
-        //    d["land area"] = +d["land area"];
-        //});
-        //data.unique
-
-        alert(data[0].model_year);
-        /*
-        d3.select("#selectedVehicle").selectAll("option")
-            .data(d3.map(data, function(d){return d.model_year;}).keys())
-            .enter()
-            .append("option")
-            .text(function(d){return d;})
-            .attr("value",function(d){return d;});
-
-    });*/
-}
-
-function updateCarSelection(year, make, model) {
-
-
 }
 
 function updateCarYearSelection(data) {
-
-    var yearKeys = d3.map(data, function(d) { return d.YEAR; }).keys();
-    console.log("Year Keys: " + yearKeys);
+    var yearKeys = d3.map(data, function(d) { return d.YEAR; }).keys().sort().reverse();
+    //console.log("Year Keys: " + yearKeys);
 
     d3.select("#vehicleYear").selectAll("option").data(yearKeys).enter().append("option")
       .text(String).attr("value", String);
     d3.select("#vehicleYear").on("change", function () {
-        document.getElementById('selectedYear').innerHTML = this.value;
+        //document.getElementById('selectedYear').innerHTML = this.value;
         updateCarMakeSelection(data);
     });
 }
 
 function updateCarMakeSelection(data, isUpdate = true) {
-
     var filteredData = carYearDataFilter(data);
     var makeKeys = d3.map(filteredData, function(d) { return d.MAKE; }).keys();
-    console.log("Make Keys: " + makeKeys);
+    //console.log("Make Keys: " + makeKeys);
 
+    // false condition code runs on first run
     if(isUpdate) {
         d3.select("#vehicleMake").selectAll("option").data(makeKeys).attr("value", String).text(String)
             .enter().append("option").attr("value", String).text(String).transition().duration(1);
         d3.select("#vehicleMake").selectAll("option").data(makeKeys).exit().remove();
 
-        updateCarModelSelection(data);
+        updateCarModelSelection(filteredData);
     }
     else {
         d3.select("#vehicleMake").selectAll("option").data(makeKeys).enter().append("option")
@@ -158,38 +121,45 @@ function updateCarMakeSelection(data, isUpdate = true) {
     }
 
     d3.select("#vehicleMake").on("change", function () {
-        document.getElementById('selectedMake').innerHTML = this.value;
-        updateCarModelSelection(data);
+        //document.getElementById('selectedMake').innerHTML = this.value;
+        updateCarModelSelection(filteredData);
     });
 
     return filteredData;
 }
 
 function updateCarModelSelection(data, isUpdate = true) {
-
     var filteredData = carMakeDataFilter(data);
     var modelKeys = d3.map(filteredData, function(d) { return d.MODEL; }).keys();
-    console.log("Model Keys: " + modelKeys);
+    //console.log("Model Keys: " + modelKeys);
+    var selectedCar;
 
+    // false condition code runs on first run
     if(isUpdate) {
         d3.select("#vehicleModel").selectAll("option").data(modelKeys).attr("value", String).text(String)
             .enter().append("option").attr("value", String).text(String).transition().duration(1);
         d3.select("#vehicleModel").selectAll("option").data(modelKeys).exit().remove();
 
         // TODO update view here
+        selectedCar = carModelDataFilter(filteredData);
+        //console.log(selectedCar);
     }
     else {
         d3.select("#vehicleModel").selectAll("option").data(modelKeys).enter().append("option")
             .attr("value", String).text(String);
+
+        selectedCar = carModelDataFilter(filteredData);
     }
 
     d3.select("#vehicleModel").on('change', function () {
-        document.getElementById('selectedModel').textContent = this.value;
+        //document.getElementById('selectedModel').textContent = this.value;
 
         // TODO update view here
+        selectedCar = carModelDataFilter(filteredData);
+        //console.log(selectedCar);
     });
 
-    return filteredData;
+    return selectedCar;
 }
 
 function carYearDataFilter(data) {
