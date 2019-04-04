@@ -160,7 +160,7 @@ function updateCarMakeSelection(data, isUpdate = true) {
     d3.select("#vehicleMake").on("change", function () {
         document.getElementById('selectedMake').innerHTML = this.value;
         updateCarModelSelection(data);
-    })
+    });
 
     return filteredData;
 }

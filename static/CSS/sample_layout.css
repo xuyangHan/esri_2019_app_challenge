@@ -52,11 +52,15 @@ button[disabled]{
   pointer-events: none;
 }
 
-#baseMapSelect {
-    position: absolute;
-    bottom: 0;
+#tab-Display, #tab-Carpool{
+    display: none;
 }
 
-#baseMapSelect-content {
-  padding-bottom: 2.5rem;    /* Footer height */
-}
+/*#baseMapSelect {*/
+    /*position: absolute;*/
+    /*bottom: 0;*/
+/*}*/
+
+/*#baseMapSelect-content {*/
+  /*padding-bottom: 2.5rem;    !* Footer height *!*/
+/*}*/
