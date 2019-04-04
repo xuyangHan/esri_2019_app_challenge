@@ -1,12 +1,11 @@
 require([
     "esri/Map",
     "esri/views/MapView",
-    //*** ADD ***//
+    "esri/Graphic",
     "esri/tasks/RouteTask",
     "esri/tasks/support/RouteParameters",
-    "esri/tasks/support/FeatureSet",
-    "esri/Graphic"
-], function (Map, MapView, RouteTask, RouteParameters, FeatureSet, Graphic) {
+    "esri/tasks/support/FeatureSet"
+], function (Map, MapView, Graphic, RouteTask, RouteParameters, FeatureSet) {
 
     var map = new Map({
         basemap: "streets-navigation-vector"
@@ -15,9 +14,11 @@ require([
     var view = new MapView({
         container: "viewDiv",
         map: map,
-        center: [-79.5, 43.77],
-        zoom: 11
+        center: [-118.71511, 34.09042],
+        zoom: 10
     });
+
+    // To allow access to the route service and prevent the user from signing in, do the Challenge step in the lab to set up a service proxy
 
     var routeTask = new RouteTask({
         url: "https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World"
@@ -52,13 +53,12 @@ require([
         // Setup the route parameters
         var routeParams = new RouteParameters({
             stops: new FeatureSet({
-                features: view.graphics
+                features: view.graphics.toArray()
             }),
             returnDirections: true
         });
         // Get the route
         routeTask.solve(routeParams).then(function (data) {
-            // Display the route
             data.routeResults.forEach(function (result) {
                 result.route.symbol = {
                     type: "simple-line",
@@ -67,8 +67,8 @@ require([
                 };
                 view.graphics.add(result.route);
             });
+
         });
     }
-
 
 });
