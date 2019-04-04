@@ -10,6 +10,9 @@
     <title>View padding - 4.11</title>
     <link rel="stylesheet" href="static/CSS/sample_layout.css">
     <link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/themes/light/main.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://js.arcgis.com/4.11/"></script>
     <!--<script src="static/JS/sample_layout.js"></script>-->
     <script src="static/JS/get_route.js"></script>
@@ -17,16 +20,64 @@
 
 <body>
 <div id="viewDiv">
+
     <div id="sidebar">
         <div id="text">
-            <h1>York University</h1>
-            <p>
-                Note that setting the view.padding makes the view.center,
-                view.extent etc work off a subsection of the full view.
-            </p>
-            <p>Try to resize the window to get a better understanding.</p>
+            <h1 class="title is-3 has-text-white-bis">Carpool </h1>
+            <section>
+                <div class="well bluewell drawpanel">
+                    <div class="wellheading">Set Home and Destination Markers</div>
+                    <button class="action-button" id="homeButton" type="button"
+                            title="Set Home"><i class="fas fa-home"></i></button>&nbsp;Set Home Marker<br/>
+                    <button class="action-button" id="destButton" type="button"
+                            title="Set Destination"><i class="fas fa-map-pin"></i></button>&nbsp;Set Destination Marker<br/>
+                    <button class="action-button" id="ResetBtn" type="button"
+                            title="Clear Markers"><i class="far fa-trash-alt"></i></button>&nbsp;Clear Markers</div>
+            </section>
+            <section>
+                <div class="">
+                    <label>Choose your Car</label>
+                    <div class="select">
+                        <select id="selectCarPanel" class="form-control">
+                            <option value="Corolla" data-vector="Corolla-vector">Toyota Corolla Sedan</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <div class="">
+                    <p><span>Distance: </span> <span class="has-text-weight-bold title is-2" id="distance">0</span> km
+                    </p>
+                    <p><span>Driving Time: </span><span class="has-text-weight-bold title is-2" id="drive-time">0</span>
+                        min</p>
+                    <p><span>Cost: </span><span class="has-text-weight-bold title is-2" id="cost">0</span> CND</p>
+                    <P>Some Description</P>
+                </div>
+            </section>
+            <section>
+                <div id="baseMapSelect">
+                    <label>Change Base Map</label>
+                    <div class="select" id="baseMapSelect-content">
+                        <select id="selectBasemapPanel" class="form-control">
+                            <option value="streets" data-vector="streets-vector">Streets</option>
+                            <option value="satellite" data-vector="satellite">Satellite</option>
+                            <option value="hybrid" data-vector="hybrid">Hybrid</option>
+                            <option value="national-geographic" data-vector="national-geographic">National Geographic
+                            </option>
+                            <option value="topo" data-vector="topo-vector">Topographic</option>
+                            <option value="gray" data-vector="gray-vector">Gray</option>
+                            <option value="dark-gray" data-vector="dark-gray-vector">Dark Gray</option>
+                            <option value="osm" data-vector="osm">Open Street Map</option>
+                            <option value="dark-gray" data-vector="streets-night-vector">Streets Night</option>
+                            <option value="streets" data-vector="streets-navigation-vector" selected="">Streets Mobile
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 </div>
+
 </body>
 </html>
