@@ -97,7 +97,7 @@ function loadCSV() {
           .attr("value", String).text(String);
         d3.select("#vehicleMake").on("change", function () {
             document.getElementById('selectedMake').innerHTML = this.value;
-        })
+        });
 
         d3.select("#vehicleModel").selectAll("option").data(modelData).enter().append("option")
           .attr("value", String).text(String);
