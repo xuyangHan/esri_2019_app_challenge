@@ -4,8 +4,11 @@ require([
     "esri/Graphic",
     "esri/tasks/RouteTask",
     "esri/tasks/support/RouteParameters",
-    "esri/tasks/support/FeatureSet"
-], function (Map, MapView, Graphic, RouteTask, RouteParameters, FeatureSet) {
+    "esri/tasks/support/FeatureSet",
+    "esri/widgets/Home",
+    "esri/widgets/Locate",
+    "esri/widgets/Search"
+], function (Map, MapView, Graphic, RouteTask, RouteParameters, FeatureSet, Home, Locate, Search) {
 
     var map = new Map({
         basemap: "streets-navigation-vector"
@@ -14,12 +17,37 @@ require([
     var view = new MapView({
         container: "viewDiv",
         map: map,
-        center: [-118.71511, 34.09042],
-        zoom: 10
+        center: [-79.5, 43.77],
+        zoom: 12
     });
 
-    // To allow access to the route service and prevent the user from signing in, do the Challenge step in the lab to set up a service proxy
+    var homeWidget = new Home({
+        view: view
+    });
+    // adds the home widget to the top left corner of the MapView
+    view.ui.add(homeWidget, "top-left");
 
+    var locateWidget = new Locate({
+        view: view,   // Attaches the Locate button to the view
+        graphic: new Graphic({
+            symbol: {type: "simple-marker"}  // overwrites the default symbol used for the
+            // graphic placed at the location of the user when found
+        })
+    });
+    view.ui.add(locateWidget, "top-left");
+
+    var searchWidget = new Search({
+        view: view
+    });
+    // Adds the search widget below other elements in
+    // the top left corner of the view
+    view.ui.add(searchWidget, {
+        position: "top-left",
+        index: 0
+    });
+
+
+    // To allow access to the route service and prevent the user from signing in, do the Challenge step in the lab to set up a service proxy
     var routeTask = new RouteTask({
         url: "https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World"
     });
