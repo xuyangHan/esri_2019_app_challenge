@@ -17,6 +17,7 @@
     <script src="https://js.arcgis.com/4.11/"></script>
     <!--<script src="static/JS/sample_layout.js"></script>-->
     <script src="static/JS/get_route.js"></script>
+
 </head>
 
 <body>
@@ -85,7 +86,6 @@
 </section>
 
 <div id="viewDiv">
-
     <div id="sidebar">
         <div id="text">
             <h1 class="title is-3 has-text-white-bis">Carpool </h1>
@@ -126,7 +126,7 @@
                 </div>
                 <p class="is-size-5">Would like to Carpooling with other people?</p>
                 <div style="padding-left: 2rem">
-                    <button class="button is-info">Share Route</button>
+                    <button class="button is-info" id="share-route-Btn">Share Route</button>
                     <button class="button is-success">Find Carpool</button>
                 </div>
             </section>
@@ -154,6 +154,6 @@
         </div>
     </div>
 </div>
-
+<script src="static/JS/show_modal.js"></script>
 </body>
 </html>
