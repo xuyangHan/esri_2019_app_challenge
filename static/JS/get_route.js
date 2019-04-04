@@ -115,6 +115,18 @@ require([
         document.getElementById("destButton").disabled = true;
     };
 
+    document.getElementById("ResetBtn").onclick = function () {
+        tempGraphicsLayer.removeAll();
+        sketchVHomeM.reset();
+        sketchVDestM.reset();
+        document.getElementById("homeButton").disabled = false;
+        document.getElementById("destButton").disabled = false;
+        tempGraphicsLayer2.removeAll();
+        view.graphics.removeAll();
+        document.getElementById("drive-time").innerHTML = 0;
+        document.getElementById("distance").innerHTML = 0;
+    };
+
 
     // To allow access to the route service and prevent the user from signing in, do the Challenge step in the lab to set up a service proxy
     var routeTask = new RouteTask({
