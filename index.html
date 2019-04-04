@@ -14,10 +14,11 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="https://js.arcgis.com/4.11/"></script>
     <!--<script src="static/JS/sample_layout.js"></script>-->
     <script src="static/JS/get_route.js"></script>
-
+    <script src="static/JS/fuelbasedlegend_dup.js"></script>
 </head>
 
 <body>
@@ -66,6 +67,24 @@
             <section class="tab-content" id="tab-Route">
                 <!--<h1 class="title is-3 has-text-white-bis">Carpool </h1>-->
                 <section>
+                    <p class="is-size-5">Choose your Car</p>
+                    <div style="padding-left: 2rem">
+                        <p>Choose Year</p>
+                        <div class="select">
+                            <select id="vehicleYear" style="width: 200px"> </select>
+                        </div>
+                        <p>Choose Make</p>
+                        <div class="select">
+                            <select id="vehicleMake" style="width: 200px"> </select>
+                        </div>
+                        <p>Choose Model</p>
+                        <div class="select">
+                            <select id="vehicleModel" style="width: 200px"> </select>
+                        </div>
+                    </div>
+
+                </section>
+                <section>
                     <div class="is-size-5">Set Home and Destination Markers</div>
                     <div class="well bluewell drawpanel" style="padding-left: 2rem">
                         <button class="action-button" id="homeButton" type="button"
@@ -77,16 +96,7 @@
                                 title="Clear Markers"><i class="far fa-trash-alt"></i></button>&nbsp;Clear Markers
                     </div>
                 </section>
-                <section>
-                    <div class="">
-                        <label class="is-size-5">Choose your Car</label>
-                        <div class="select" style="padding-left: 2rem">
-                            <select id="selectCarPanel" class="form-control">
-                                <option value="Corolla" data-vector="Corolla-vector">Toyota Corolla Sedan</option>
-                            </select>
-                        </div>
-                    </div>
-                </section>
+
                 <section>
                     <p class="is-size-5">Route Information: </p>
                     <div style="padding-left: 2rem">
@@ -107,10 +117,15 @@
             </section>
             <section id="tab-Carpool" class="tab-content">
                 <p class="is-size-5">Would like to Carpooling with other people?</p>
+                <p>Find available Carpool:</p>
                 <div style="padding-left: 2rem">
-                    <p>Find available Carpool:</p>
                     <button class="button is-success">Find Carpool</button>
-                    <p>Share with others:</p>
+                </div>
+                <p>Share with others:</p>
+                <div style="padding-left: 2rem">
+                    <label>Your Name</label>
+                    <input class="input" type="text" placeholder="Your Name">
+                    <label>Your Email</label>
                     <input class="input" type="text" placeholder="Your Email">
                     <button class="button is-info" id="share-route-Btn">Share Route</button>
                 </div>
