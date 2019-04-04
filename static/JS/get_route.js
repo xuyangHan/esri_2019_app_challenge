@@ -66,8 +66,12 @@ require([
                     width: 3
                 };
                 view.graphics.add(result.route);
-            });
 
+                var totalDriveTime = result.directions.totalDriveTime;
+                var totalLength = result.directions.totalLength;
+                var totalTime = result.directions.totalTime;
+                //alert("Distance : "+totalLength+" miles\nEstimated Time : "+totalDriveTime+" minutes" + "Total time"+ totalTime);
+            });
         });
     }
 
