@@ -8,11 +8,19 @@ require([
     "esri/widgets/Home",
     "esri/widgets/Locate",
     "esri/widgets/Search",
-    "esri/widgets/BasemapToggle"
-], function (Map, MapView, Graphic, RouteTask, RouteParameters, FeatureSet, Home, Locate, Search, BasemapToggle) {
+    "esri/widgets/BasemapToggle",
+    "esri/widgets/Sketch/SketchViewModel",
+    "esri/layers/GraphicsLayer",
+], function (Map, MapView, Graphic, RouteTask, RouteParameters, FeatureSet, Home, Locate, Search, BasemapToggle,
+             SketchViewModel, GraphicsLayer) {
+
+    // GraphicsLayer to hold graphics created via sketch view model
+    var tempGraphicsLayer = new GraphicsLayer(); //home
+    var tempGraphicsLayer2 = new GraphicsLayer(); //dest
 
     var map = new Map({
-        basemap: "streets-navigation-vector"
+        basemap: "streets-navigation-vector",
+        layers: [tempGraphicsLayer, tempGraphicsLayer2]
     });
 
     var view = new MapView({
@@ -53,6 +61,61 @@ require([
     });
 
 
+    // Create a new SketchViewModel and set
+    // its required parameters
+    var sketchVHomeM = new SketchViewModel({
+        layer: tempGraphicsLayer,
+        view: view,
+        pointSymbol: { // symbol used for points
+            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+            url: "static/Imgs/home-solid.png",
+            width: "20px",
+            height: "20px"
+        }
+    });
+
+    var sketchVDestM = new SketchViewModel({
+        layer: tempGraphicsLayer2,
+        view: view,
+        pointSymbol: { // symbol used for points
+            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+            url: "static/Imgs/map-pin-solid.png",
+            width: "10px",
+            height: "20px"
+        }
+    });
+
+
+    sketchVHomeM.on("draw-complete", function (evt) {
+        tempGraphicsLayer.add(evt.graphic);
+    });
+
+    sketchVDestM.on("draw-complete", function (evt) {
+        // add the graphic to the graphics layer
+        tempGraphicsLayer2.add(evt.graphic);
+    });
+
+
+    // *************************************
+    // activate the sketch to create a home point
+    // *************************************
+    var drawHomeButton = document.getElementById("homeButton");
+    drawHomeButton.onclick = function () {
+        view.graphics.removeAll();
+        // add the graphic to the graphics layer
+        sketchVHomeM.create("point");
+        document.getElementById("homeButton").disabled = true;
+    };
+    // *************************************
+    // activate the sketch to create a dest point
+    // *************************************
+    var drawDestButton = document.getElementById("destButton");
+    drawDestButton.onclick = function () {
+        sketchVDestM.create("point");
+        document.getElementById("destButton").disabled = true;
+    };
+
+
     // To allow access to the route service and prevent the user from signing in, do the Challenge step in the lab to set up a service proxy
     var routeTask = new RouteTask({
         url: "https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World"
@@ -83,12 +146,15 @@ require([
         view.graphics.add(graphic);
     }
 
+
     function getRoute() {
         // Setup the route parameters
         var routeParams = new RouteParameters({
-            stops: new FeatureSet({
-                features: view.graphics.toArray()
-            }),
+            stops: new FeatureSet(
+                {
+                    features: view.graphics.toArray()
+                }
+            ),
             returnDirections: true
         });
         // Get the route
@@ -100,7 +166,6 @@ require([
                     width: 3
                 };
                 view.graphics.add(result.route);
-
                 var totalDriveTime = result.directions.totalDriveTime;
                 var totalLength = result.directions.totalLength;
                 var totalTime = result.directions.totalTime;
