@@ -7,8 +7,9 @@ require([
     "esri/tasks/support/FeatureSet",
     "esri/widgets/Home",
     "esri/widgets/Locate",
-    "esri/widgets/Search"
-], function (Map, MapView, Graphic, RouteTask, RouteParameters, FeatureSet, Home, Locate, Search) {
+    "esri/widgets/Search",
+    "esri/widgets/BasemapToggle"
+], function (Map, MapView, Graphic, RouteTask, RouteParameters, FeatureSet, Home, Locate, Search, BasemapToggle) {
 
     var map = new Map({
         basemap: "streets-navigation-vector"
@@ -44,6 +45,11 @@ require([
     view.ui.add(searchWidget, {
         position: "top-left",
         index: 0
+    });
+
+    // Basemap events
+    $("#selectBasemapPanel").on("change", function (e) {
+        map.basemap = e.target.options[e.target.selectedIndex].dataset.vector;
     });
 
 
@@ -98,7 +104,9 @@ require([
                 var totalDriveTime = result.directions.totalDriveTime;
                 var totalLength = result.directions.totalLength;
                 var totalTime = result.directions.totalTime;
-                //alert("Distance : "+totalLength+" miles\nEstimated Time : "+totalDriveTime+" minutes" + "Total time"+ totalTime);
+                // alert("Distance : "+totalLength+" miles\nEstimated Time : "+totalDriveTime+" minutes\n" + "Total time"+ totalTime);
+                document.getElementById("drive-time").innerHTML = totalDriveTime.toFixed(1);
+                document.getElementById("distance").innerHTML = totalLength.toFixed(2);
             });
         });
     }
