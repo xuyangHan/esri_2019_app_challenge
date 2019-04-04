@@ -90,8 +90,8 @@
         <div id="text">
             <h1 class="title is-3 has-text-white-bis">Carpool </h1>
             <section>
-                <div class="well bluewell drawpanel">
-                    <div class="wellheading">Set Home and Destination Markers</div>
+                <div class="is-size-5">Set Home and Destination Markers</div>
+                <div class="well bluewell drawpanel" style="padding-left: 2rem">
                     <button class="action-button" id="homeButton" type="button"
                             title="Set Home"><i class="fas fa-home"></i></button>&nbsp;Set Home Marker<br/>
                     <button class="action-button" id="destButton" type="button"
@@ -103,8 +103,8 @@
             </section>
             <section>
                 <div class="">
-                    <label>Choose your Car</label>
-                    <div class="select">
+                    <label class="is-size-5">Choose your Car</label>
+                    <div class="select" style="padding-left: 2rem">
                         <select id="selectCarPanel" class="form-control">
                             <option value="Corolla" data-vector="Corolla-vector">Toyota Corolla Sedan</option>
                         </select>
@@ -112,19 +112,28 @@
                 </div>
             </section>
             <section>
-                <div class="">
+                <p class="is-size-5">Route Information: </p>
+                <div style="padding-left: 2rem">
                     <p><span>Distance: </span> <span class="has-text-weight-bold title is-2" id="distance">0</span> km
                     </p>
                     <p><span>Driving Time: </span><span class="has-text-weight-bold title is-2" id="drive-time">0</span>
                         min</p>
+                </div>
+                <p class="is-size-5">If you choose Carpool, how much you will save:</p>
+                <div style="padding-left: 2rem">
                     <p><span>Cost: </span><span class="has-text-weight-bold title is-2" id="cost">0</span> CND</p>
                     <P>Some Description</P>
+                </div>
+                <p class="is-size-5">Would like to Carpooling with other people?</p>
+                <div style="padding-left: 2rem">
+                    <button class="button is-info">Share Route</button>
+                    <button class="button is-success">Find Carpool</button>
                 </div>
             </section>
             <section>
                 <div id="baseMapSelect">
                     <label>Change Base Map</label>
-                    <div class="select" id="baseMapSelect-content">
+                    <div class="select" id="baseMapSelect-content" style="padding-left: 2rem">
                         <select id="selectBasemapPanel" class="form-control">
                             <option value="streets" data-vector="streets-vector">Streets</option>
                             <option value="satellite" data-vector="satellite">Satellite</option>
