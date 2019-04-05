@@ -38,13 +38,44 @@ require([
         zoom: 12
     });
 
-    var featureLayer = new FeatureLayer({
-        url: "https://services.arcgis.com/4TKcmj8FHh5Vtobt/arcgis/rest/services/Carpool_DataSheet/FeatureServer/0",
+    var homeRenderer = {
+        type: "simple",
+        symbol: {
+            type: "picture-marker",
+            url: "static/Imgs/home-solid.png",
+            width: "20px",
+            height: "20px",
+            color: "cyan"
+        }
+    };
+
+    var destinationRenderer = {
+        type: "simple",
+        symbol: {
+            type: "picture-marker",
+            color: "cyan",
+            url: "static/Imgs/map-pin-solid.png",
+            width: "10px",
+            height: "20px"
+        }
+    };
+
+    var homeLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/4TKcmj8FHh5Vtobt/arcgis/rest/services/Carpool_DataSheet_2/FeatureServer/0",
         outFields: ["*"],
+        renderer: homeRenderer,
         visible: true
     });
 
-    map.add(featureLayer);
+    var destinationLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/4TKcmj8FHh5Vtobt/arcgis/rest/services/Carpool_DataSheet/FeatureServer/0",
+        outFields: ["*"],
+        renderer: destinationRenderer,
+        visible: true
+    });
+
+    map.add(homeLayer);
+    map.add(destinationLayer);
 
     var homeWidget = new Home({
         view: view
@@ -188,7 +219,7 @@ require([
     document.getElementById("share-route-Btn").onclick = function () {
         if (confirm('Are you sure you want to share your route with other people for carpooling?')) {
             // Save it!
-            gatherDataToAddInFeatureLayer();
+            gatherDataToAddInFeatureLayers();
         } else {
             // Do nothing!
         }
@@ -244,7 +275,7 @@ require([
         });
     }
 
-    function addFeature(point, carYear, carMake, carModel, latitude, longitude, name, email) {
+    function updateFeaturesList(homePoint, destinationPoint, carYear, carMake, carModel, latitude, longitude, name, email) {
         //console.log(point.x, point.y, carYear, carMake, carModel, latitude, longitude, name, email);
         const attributes = {};
         attributes["Car_Year"] = carYear;
@@ -256,21 +287,40 @@ require([
         attributes["Name"] = name;
         attributes["Email"] = email;
 
-        const addFeature = new Graphic({
-            geometry: point,
+        const destinationFeature =  new Graphic({
+            geometry: destinationPoint,
             attributes: attributes
         });
 
-        featureLayer.applyEdits({
-            addFeatures: [addFeature]
-        }).then(function (result) {
+        destinationLayer.applyEdits({
+            addFeatures: [destinationFeature]
+        }).then( function(result) {
             console.log("projected points: ", result);
-        }).catch(function (error) {
+            if (result.addFeatureResults.length > 0) {
+                const objectId = result.addFeatureResults[0].objectId;
+
+                attributes["Phone"] = objectId;
+                const homeFeature =  new Graphic({
+                    geometry: homePoint,
+                    attributes: attributes
+                });
+                //selectFeature(objectId);
+
+                homeLayer.applyEdits({
+                    addFeatures: [homeFeature]
+                }).then( function(result) {
+                    console.log("projected points: ", result);
+                }).catch( function(error) {
+                    console.error("Error while adding feature: ", error);
+                });
+            }
+        }).catch( function(error) {
             console.error("Error while adding feature: ", error);
         });
     }
 
-    function gatherDataToAddInFeatureLayer() {
+    function gatherDataToAddInFeatureLayers() {
+
         var yearSelection = document.getElementById('vehicleYear');
         var year = yearSelection.options[yearSelection.selectedIndex].value;
 
@@ -280,35 +330,38 @@ require([
         var modelSelection = document.getElementById('vehicleModel');
         var model = modelSelection.options[modelSelection.selectedIndex].value;
 
-        var point;
-        var latitude;
-        var longitude;
+        var homePoint;
+        var destinationPoint;
+        //var latitude;
+        //var longitude;
 
         view.graphics.forEach(function (graphic) {
-            if (graphic.attributes["name"] == "destination") {
-                point = graphic.geometry;
-                console.log("Found Destination", point);
-            } else if (graphic.attributes["name"] == "home") {
-                latitude = graphic.geometry.x;
-                longitude = graphic.geometry.y;
-                console.log("Found Home", latitude, longitude);
+            if(graphic.attributes["name"] == "destination") {
+                destinationPoint = graphic.geometry;
+                console.log("Found Destination", destinationPoint);
+            }
+            else if (graphic.attributes["name"] == "home") {
+                //latitude = graphic.geometry.x;
+                //longitude = graphic.geometry.y;
+                homePoint = graphic.geometry;
+                console.log("Found Home", homePoint);//latitude, longitude);
             }
         });
 
-        var name = document.getElementById(id = 'user_name');
-        var email = document.getElementById(id = 'user_email');
+        var name = document.getElementById(id = 'user_name').value;
+        var email = document.getElementById(id = 'user_email').value;
 
-        addFeature(point, year, make, model, latitude, longitude, name.value, email.value);
+        updateFeaturesList(homePoint, destinationPoint, year, make, model, 0, 0, name, email);
     }
 
     function queryFeatureLayer(graphicGeometryHome) {
         /*
-        // query all features from the featureLayer layer
+        // query all features from the destinationLayer layer
         view
           .when(function() {
-            return featureLayer.when(function() {
-              var query = featureLayer.createQuery();
-              return featureLayer.queryFeatures(query);
+            return destinationLayer.when(function() {
+              var query = destinationLayer.createQuery();
+              return destinationLayer.queryFeatures(query);
             });
           })
           .then(getValues)
@@ -326,13 +379,13 @@ require([
         }*/
 
         function queryForFeatureGeometries() {
-            var featureQuery = featureLayer.createQuery();
+          var featureQuery = destinationLayer.createQuery();
 
-            return featureLayer.queryFeatures(featureQuery).then(function (response) {
-                var featuresGeometry = response.features.map(function (feature) {
-                    var mapPoint = new MapPoint(feature.attributes.Latitude, feature.attributes.Longitude);
-                    return mapPoint;
-                });
+          return destinationLayer.queryFeatures(featureQuery).then(function(response) {
+            var featuresGeometry = response.features.map(function(feature) {
+                var mapPoint = new MapPoint(feature.attributes.Latitude, feature.attributes.Longitude);
+                return mapPoint;
+            });
 
                 return featuresGeometry;
             });
@@ -340,14 +393,15 @@ require([
 
 
 
-        /*var query = featureLayer.createQuery();
+        /*var query = destinationLayer.createQuery();
         query.geometry = graphicGeometryHome;
         query.spatialRelationship = "intersects";
-        return featureLayer.queryFeatures(query);*/
+        return destinationLayer.queryFeatures(query);*/
     }
 
     function findCarPoolArroundMe() {
-        var homeBufferDist = 1000; //parseInt(distanceSlider.value);
+        var homeBufferDist = 1000;//parseInt(distanceSlider.value);
+        var destBufferDist = 400;
         //console.log(homeBufferDist);
         //var isMiles = true;
 
@@ -407,53 +461,135 @@ require([
         view.graphics.add(circleGraphic);
         */
 
-
-        var sourceBuffers = geometryEngine.geodesicBuffer(
+        var homeBuffers = geometryEngine.geodesicBuffer(
             graphicGeometryHome,
             homeBufferDist,
             "meters",
             true
         );
 
-        var bufferGraphic = new Graphic({
-            geometry: sourceBuffers, // TODO to be filled
+        var destBuffers = geometryEngine.geodesicBuffer(
+            graphicGeometryDest,
+            destBufferDist,
+            "meters",
+            true
+        );
+
+        var homeBufferGraphic = new Graphic({
+            geometry: homeBuffers, // TODO to be filled
             symbol: {
-                type: "simple-fill", // autocasts as new SimpleFillSymbol()
-                outline: {
-                    width: 1.5,
-                    color: [255, 128, 0, 0.5]
-                },
-                style: "none"
+              type: "simple-fill", // autocasts as new SimpleFillSymbol()
+              outline: {
+                width: 1.5,
+                color: 'cyan' //[255, 128, 0, 0.5]
+              },
+              style: "none"
             }
         });
         //view.graphics.removeAll();
-        view.graphics.add(bufferGraphic);
+        view.graphics.add(homeBufferGraphic);
 
-        var featureQuery = featureLayer.createQuery();
-        featureQuery.geometry = bufferGraphic.geometry;
-        featureLayer.queryFeatures(featureQuery).then(selectInBuffer);
+        var destBufferGraphic = new Graphic({
+            geometry: destBuffers, // TODO to be filled
+            symbol: {
+              type: "simple-fill", // autocasts as new SimpleFillSymbol()
+              outline: {
+                width: 1.5,
+                color: 'green'//[255, 128, 0, 0.5]
+              },
+              style: "none"
+            }
+        });
+        //view.graphics.removeAll();
+        view.graphics.add(destBufferGraphic);
+
+        var selectedHighlights;
+
+        var featureQuery = destinationLayer.createQuery();
+        featureQuery.outSpatialReference = view.spatialReference;
+        featureQuery.geometry = destBufferGraphic.geometry;
+        //query.where = "CONST_NAME LIKE '%"+searchString+"%'";
+        destinationLayer.queryFeatures(featureQuery).then(function(destinationResponse){
+
+            if(selectedHighlights) {
+                selectedHighlights.remove();
+            }
+
+            var destFeatures = destinationResponse.features;
+            console.log("Common Destination: ", destFeatures.length);
+
+            //selectedHighlights = destinationLayer.highlight(features);
+            //console.log("Selected Highlihts", selectedHighlights);
+
+            if(destFeatures.length >0) {
+                var featureQuery = homeLayer.createQuery();
+                featureQuery.outSpatialReference = view.spatialReference;
+                featureQuery.geometry = homeBufferGraphic.geometry;
+                homeLayer.queryFeatures(featureQuery).then(function(homeResponse) {
+
+                    var homeFeatures = homeResponse.features;
+                    console.log("Common Home: ", homeFeatures.length);
+                    if(homeFeatures.length > 0) {
+                        destFeatures.forEach(function(destFeature){
+                            console.log("Finding in common neighbourhood", destFeature.objectId, destFeature.attributes.Email);
+                            homeFeatures.forEach(function (homeFeature) {
+                                if(destFeature.objectId == homeFeature.attributes.Phone)
+                                {
+                                    console.log("Found you: ", homeFeature.attributes.Email);
+                                    selectedHighlights = destinationLayer.highlight(destFeature);
+                                }
+                            })
+                        });
+                    }
+                });
+            }
+        });
     }
 
-    function selectInBuffer(response) {
+    var selectedHighlights;
+    function selectDestinationBuffers(response){
+
+        /*if(selectedHighlights) {
+            selectedHighlights.forEach(function (highlight){
+                highlight.remove();
+            });
+        }*/
+        if(selectedHighlights) {
+            selectedHighlights.remove();
+        }
+
         var feature;
         var features = response.features;
         var inBuffer = [];
-        console.log(features);
+        //console.log(features);
+        console.log("To Highlight: ", features.length);
+
+        //features.forEach(function (feature) {
+        //    selectedHighlights.push(destinationLayer.highlight(feature));
+        //});
+        selectedHighlights = destinationLayer.highlight(features);
+        console.log("Selected Highlihts", selectedHighlights);
+
+        /*
         //filter out features that are not actually in buffer, since we got all points in the buffer's bounding box
         for (var i = 0; i < features.length; i++) {
             feature = features[i];
-            if (circle.contains(feature.geometry)) {
-                inBuffer.push(feature.attributes[featureLayer.objectIdField]);
+            if(circle.contains(feature.geometry)){
+                inBuffer.push(feature.attributes[destinationLayer.objectIdField]);
             }
         }
-        console.log("In Buffer", inBuffer.length);
+        console.log("In Buffer" , inBuffer.length);
         var query = new Query();
         query.objectIds = inBuffer;
         //use a fast objectIds selection query (should not need to go to the server)
-        featureLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, function (results) {
+        destinationLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, function(results){
             results.forEach(function (result) {
                 console.log(result.attributes.Car_Make);
             })
-        });
+        });*/
+    }
+    
+    function selectHomeBuffersTowardsDestinationBuffer(features) {
+        
     }
 });
