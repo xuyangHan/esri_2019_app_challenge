@@ -1,0 +1,48 @@
+html, body {
+    font-family: 'Open Sans', serif;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, .5);
+}
+
+.hero.is-info {
+    background-image: url(../Imgs/background.jpg);
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.navbar-item:hover{
+    background-color: white;!important
+}
+
+.hero .nav, .hero.is-success .nav {
+    color: #000000;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.hero .subtitle {
+    padding: 3rem 0;
+    line-height: 1.5;
+}
+
+p {
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+
+.cover-container {
+    width: 100%; /* Must be percentage or pixels for horizontal alignment */
+  }
+  .cc {
+	text-shadow: 2px 2px #ffffff;
+	font-size: 18px;
+	text-align : justify;
+  }
+  .cc-author {
+
+	font-size: 14px;
+	text-align : left;
+  }
