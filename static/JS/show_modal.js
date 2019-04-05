@@ -1,13 +1,5 @@
 // Get the button that opens the modal
-var btn = document.getElementById("share-route-Btn");
 
-btn.onclick = function () {
-    if (confirm('Are you sure you want to share your route with other people for carpooling?')) {
-        // Save it!
-    } else {
-        // Do nothing!
-    }
-};
 
 function tab(evt, tabName) {
   var i, tabcontent, tablinks;
@@ -22,3 +14,4 @@ function tab(evt, tabName) {
   document.getElementById(tabName).style.display = "block";
   evt.currentTarget.className += " is-active";
 }
+
