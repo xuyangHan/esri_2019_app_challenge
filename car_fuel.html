@@ -11,6 +11,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
     <script src="https://js.arcgis.com/4.11/"></script>
     <script src="static/JS/fuelbasedlegend.js"></script>
+    <script src="static/JS/featurelayer.js"></script>
 </head>
 <body>
 <div id="viewDiv">
@@ -23,6 +24,12 @@
             <!--label id="selectedYear"></label-->
             <!--label id="selectedMake"></label-->
             <!--label id="selectedModel"></label-->
+
+            <label>Search Radius:</label>
+            <input id="distance" type="range" min="10" max="10000" step="10" value="10000"/>
+            <span id="distance-value">10000</span><span> meters</span>
+
+            <!--div id="formDiv"></div-->
         </div>
     </div>
 </div>
