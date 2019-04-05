@@ -13,6 +13,7 @@ require([
     "esri/layers/GraphicsLayer",
 ], function (Map, MapView, Graphic, RouteTask, RouteParameters, FeatureSet, Home, Locate, Search, BasemapToggle,
              SketchViewModel, GraphicsLayer) {
+    loadCSV();
 
     // GraphicsLayer to hold graphics created via sketch view model
     var tempGraphicsLayer = new GraphicsLayer(); //home
