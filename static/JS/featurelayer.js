@@ -1,7 +1,8 @@
-
+/*
+var featureLayer;
 function intializeFeatureLayer(map) {
 
-    const featureLayer = new FeatureLayer({
+    featureLayer = new FeatureLayer({
         url: "https://services.arcgis.com/4TKcmj8FHh5Vtobt/arcgis/rest/services/Carpool_DataSheet/FeatureServer/0",
         outFields: ["*"],
         visible: true
@@ -10,7 +11,7 @@ function intializeFeatureLayer(map) {
     map.add(featureLayer);
 }
 
-function addFeature(point, carYear, carMake, carModel, latitude, longitude, name, email, featureLayer) {
+function addFeature(point, carYear, carMake, carModel, latitude, longitude, name, email) {
     const attributes = {};
     attributes["Car_Year"] = carYear;
     attributes["Car_Make"] = carMake;
@@ -22,15 +23,15 @@ function addFeature(point, carYear, carMake, carModel, latitude, longitude, name
     attributes["Email"] = email;
 
     const addFeature =  new Graphic({
-    geometry: point,
-    attributes: attributes
+        geometry: point,
+        attributes: attributes
     });
 
     featureLayer.applyEdits({
-    addFeatures: [addFeature]
+        addFeatures: [addFeature]
     }).then( function(result) {
-      console.log("projected points: ", result);
+        console.log("projected points: ", result);
     }).catch( function(error) {
-      console.error("Error while adding feature: ", error);
+        console.error("Error while adding feature: ", error);
     });
-}
+}*/
