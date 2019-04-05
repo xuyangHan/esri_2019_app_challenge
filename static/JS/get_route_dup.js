@@ -196,6 +196,56 @@ require([
         });
     };
 
+    /*view.on("click", function(event) {
+        // clear previous feature selection
+       // unselectFeature();
+        if (
+          document.getElementById("viewDiv").style.cursor != "crosshair"
+        ) {
+          view.hitTest(event).then(function(response) {
+            // If a user clicks on an incident feature, select the feature.
+            if (response.results.length === 0) {
+              //toggleEditingDivs("block", "none");
+            } else if (
+              response.results[0].graphic &&
+              response.results[0].graphic.layer.id == "Carpool_DataSheet"
+            ) {
+              if (addFeatureDiv.style.display === "block") {
+                //toggleEditingDivs("none", "block");
+              }
+              selectFeature(
+                response.results[0].graphic.attributes[
+                  featureLayer.objectIdField
+                ]
+              );
+            }
+          });
+        }
+      });
+
+    function selectFeature(objectId) {
+      // query feature from the server
+      destinationLayer
+        .queryFeatures({
+          objectIds: [objectId],
+          outFields: ["*"],
+          returnGeometry: true
+        })
+        .then(function(results) {
+          if (results.features.length > 0) {
+            editFeature = results.features[0];
+
+            // display the attributes of selected feature in the form
+            //featureForm.feature = editFeature;
+
+            // highlight the feature on the view
+            view.whenLayerView(editFeature.layer).then(function(layerView) {
+              highlight = layerView.highlight(editFeature);
+            });
+          }
+        });
+    }*/
+
     document.getElementById("ResetBtn").onclick = function () {
         tempGraphicsLayer.removeAll();
         sketchVHomeM.reset();
@@ -263,7 +313,7 @@ require([
                     color: [5, 150, 255],
                     width: 3
                 };
-                view.graphics.add(result.route);
+                tempGraphicsLayer.add(result.route);
                 totalDriveTime = result.directions.totalDriveTime;
                 totalLength = result.directions.totalLength;
                 var totalTime = result.directions.totalTime;
@@ -336,15 +386,17 @@ require([
         //var longitude;
 
         view.graphics.forEach(function (graphic) {
-            if(graphic.attributes["name"] == "destination") {
-                destinationPoint = graphic.geometry;
-                console.log("Found Destination", destinationPoint);
-            }
-            else if (graphic.attributes["name"] == "home") {
-                //latitude = graphic.geometry.x;
-                //longitude = graphic.geometry.y;
-                homePoint = graphic.geometry;
-                console.log("Found Home", homePoint);//latitude, longitude);
+            if(graphic.attributes.hasOwnProperty('name')){
+                if(graphic.attributes["name"] == "destination") {
+                    destinationPoint = graphic.geometry;
+                    console.log("Found Destination", destinationPoint);
+                }
+                else if (graphic.attributes["name"] == "home") {
+                    //latitude = graphic.geometry.x;
+                    //longitude = graphic.geometry.y;
+                    homePoint = graphic.geometry;
+                    console.log("Found Home", homePoint);//latitude, longitude);
+                }
             }
         });
 
@@ -487,7 +539,7 @@ require([
             }
         });
         //view.graphics.removeAll();
-        view.graphics.add(homeBufferGraphic);
+        tempGraphicsLayer.add(homeBufferGraphic);
 
         var destBufferGraphic = new Graphic({
             geometry: destBuffers, // TODO to be filled
@@ -501,7 +553,7 @@ require([
             }
         });
         //view.graphics.removeAll();
-        view.graphics.add(destBufferGraphic);
+        tempGraphicsLayer2.add(destBufferGraphic);
 
         var selectedHighlights;
 
@@ -531,12 +583,23 @@ require([
                     console.log("Common Home: ", homeFeatures.length);
                     if(homeFeatures.length > 0) {
                         destFeatures.forEach(function(destFeature){
-                            console.log("Finding in common neighbourhood", destFeature.objectId, destFeature.attributes.Email);
+                            console.log("Finding in common destination", destFeature.objectId, destFeature.attributes.Email);
+
+                            var output = document.getElementById('sourceScroll');
+
                             homeFeatures.forEach(function (homeFeature) {
-                                if(destFeature.objectId == homeFeature.attributes.Phone)
+                                console.log(destFeature.objectIdField, destFeature.attributes.Email, homeFeature.attributes.Phone, homeFeature.attributes.Email);
+                                if(destFeature.attributes.Email == homeFeature.attributes.Email)
                                 {
                                     console.log("Found you: ", homeFeature.attributes.Email);
                                     selectedHighlights = destinationLayer.highlight(destFeature);
+
+                                    var element = document.createElement("div");
+                                    //element.setAttribute("id","timedrpact"+i);
+                                    //element.setAttribute("class","inner");
+                                    element.innerHTML= homeFeature.attributes.Name;
+
+                                    output.appendChild(element);
                                 }
                             })
                         });

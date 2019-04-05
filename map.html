@@ -122,12 +122,12 @@
             <section id="tab-Carpool" class="tab-content">
                 <p class="is-size-5">Would like to Carpooling with other people?</p>
                 <p>Find available Carpool:</p>
-                <div style="padding-left: 2rem">
+                <!--div style="padding-left: 2rem">
                     <label>Search Radius:</label>
-                    <input id="distance" type="range" min="10" max="5000" step="10" value="1000"/>
-                    <span id="distance-value">1000</span><span> meters</span>
+                    <input id="distanceslider" type="range" min="10" max="5000" step="10" value="1000"/>
+                    <span id="distancevalue">1000</span><span> meters</span>
                     <button class="button is-success" id="find-carpool-btn">Find Carpool</button>
-                </div>
+                </div-->
                 <p>Share with others:</p>
                 <div style="padding-left: 2rem">
                     <label>Your Name</label>
@@ -136,6 +136,8 @@
                     <input class="input" type="text" placeholder="Your Email" id = "user_email">
                     <button class="button is-info" id="share-route-Btn">Share Route</button>
                 </div>
+                <div id="destinationDetails"></div>
+                <div id="sourceScroll" class="out"></div>
             </section>
 
             <section id="tab-Display" class="tab-content">
