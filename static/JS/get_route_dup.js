@@ -112,7 +112,7 @@ require([
             if (view.graphics.length === 0) {
                 addGraphic("start", event.mapPoint);
             } else if (view.graphics.length === 1) {
-                addGraphic("finish", event.mapPoint);
+                addGraphic("start", event.mapPoint);
                 // Call the route service
                 getRoute();
             } else {
@@ -132,14 +132,14 @@ require([
         document.getElementById("destButton").disabled = true;
         view.on("click", function (event) {
             if (view.graphics.length === 0) {
-                addGraphic("start", event.mapPoint);
+                addGraphic("finish", event.mapPoint);
             } else if (view.graphics.length === 1) {
                 addGraphic("finish", event.mapPoint);
                 // Call the route service
                 getRoute();
             } else {
                 view.graphics.removeAll();
-                addGraphic("start", event.mapPoint);
+                addGraphic("finish", event.mapPoint);
             }
         });
     };
