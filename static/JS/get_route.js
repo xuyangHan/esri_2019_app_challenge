@@ -134,7 +134,7 @@ require([
 
     // To allow access to the route service and prevent the user from signing in, do the Challenge step in the lab to set up a service proxy
     var routeTask = new RouteTask({
-        url: "https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World"
+        url: "https://utility.arcgis.com/usrsvcs/appservices/TDWzWsvWrqyvJH5i/rest/services/World/Route/NAServer/Route_World/solve"
     });
 
     view.on("click", function (event) {
