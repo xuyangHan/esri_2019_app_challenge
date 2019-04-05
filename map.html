@@ -7,7 +7,7 @@
   For more information about the view-padding sample, read the original sample description at developers.arcgis.com.
   https://developers.arcgis.com/javascript/latest/sample-code/view-padding/index.html
   -->
-    <title>View padding - 4.11</title>
+    <title>Map | Way2Share</title>
     <link rel="shortcut icon" href="static/Imgs/logo_small.png" type="image/x-icon">
     <link rel="stylesheet" href="static/CSS/sample_layout.css">
     <link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/themes/light/main.css"/>
@@ -123,7 +123,10 @@
                 <p class="is-size-5">Would like to Carpooling with other people?</p>
                 <p>Find available Carpool:</p>
                 <div style="padding-left: 2rem">
-                    <button class="button is-success">Find Carpool</button>
+                    <label>Search Radius:</label>
+                    <input id="distance" type="range" min="10" max="5000" step="10" value="1000"/>
+                    <span id="distance-value">1000</span><span> meters</span>
+                    <button class="button is-success" id="find-carpool-btn">Find Carpool</button>
                 </div>
                 <p>Share with others:</p>
                 <div style="padding-left: 2rem">

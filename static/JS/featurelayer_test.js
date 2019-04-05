@@ -1,3 +1,4 @@
+/*
 require([
     "esri/Map",
     "esri/views/MapView",
@@ -18,14 +19,15 @@ require([
         map: map,
         //center: [-118.71511, 34.09042],
         center: [-79.5, 43.77],
-        /*extent: {
+        //
+        extent: {
             // autocasts as new Extent()
             xmin: -9177811,
             ymin: 4247000,
             xmax: -9176791,
             ymax: 4247784,
             spatialReference: 102100
-          },*/
+          },//
         zoom: 12
     });
 
@@ -98,7 +100,7 @@ require([
           distanceValue.innerText = distanceSlider.value;
     });
 
-    /*
+    //
     function createBuffer(wellPoints) {
       var bufferDistance = parseInt(distanceSlider.value);
       var wellBuffers = geometryEngine.geodesicBuffer(
@@ -123,5 +125,5 @@ require([
       });
       view.graphics.removeAll();
       view.graphics.add(bufferGraphic);
-    }*/
-});
+    }//
+});*/
