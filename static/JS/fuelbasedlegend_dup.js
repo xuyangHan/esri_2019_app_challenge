@@ -4,8 +4,8 @@ function loadCSV() {
     d3.csv("static/CSV/carfuelrating.csv", function(error, data) {
 
         updateCarYearSelection(data);
-        // var filteredData = updateCarMakeSelection(data, false);
-        // var selectedCar = updateCarModelSelection(filteredData, false);
+        var filteredData = updateCarMakeSelection(data, false);
+        var selectedCar = updateCarModelSelection(filteredData, false);
 
         // TODO update view here
         //console.log(selectedCar);
