@@ -1,3 +1,6 @@
+var totalDriveTime = 0;
+var totalLength = 0;
+
 require([
     "esri/Map",
     "esri/views/MapView",
@@ -179,12 +182,13 @@ require([
                     width: 3
                 };
                 view.graphics.add(result.route);
-                var totalDriveTime = result.directions.totalDriveTime;
-                var totalLength = result.directions.totalLength;
+                totalDriveTime = result.directions.totalDriveTime;
+                totalLength = result.directions.totalLength;
                 var totalTime = result.directions.totalTime;
                 // alert("Distance : "+totalLength+" miles\nEstimated Time : "+totalDriveTime+" minutes\n" + "Total time"+ totalTime);
                 document.getElementById("drive-time").innerHTML = totalDriveTime.toFixed(1);
                 document.getElementById("distance").innerHTML = totalLength.toFixed(2);
+                showCostnCO2(selectedCar);
             });
         });
     }

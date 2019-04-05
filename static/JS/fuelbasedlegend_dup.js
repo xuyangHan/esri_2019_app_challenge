@@ -1,14 +1,15 @@
 
-
+var selectedCar;
 function loadCSV() {
     d3.csv("static/CSV/carfuelrating.csv", function(error, data) {
 
         updateCarYearSelection(data);
         var filteredData = updateCarMakeSelection(data, false);
-        var selectedCar = updateCarModelSelection(filteredData, false);
+        selectedCar = updateCarModelSelection(filteredData, false);
 
         // TODO update view here
-        //console.log(selectedCar);
+        showCostnCO2(selectedCar);
+        console.log(selectedCar);
     });
 }
 
@@ -54,7 +55,7 @@ function updateCarModelSelection(data, isUpdate = true) {
     var filteredData = carMakeDataFilter(data);
     var modelKeys = d3.map(filteredData, function(d) { return d.MODEL; }).keys();
     //console.log("Model Keys: " + modelKeys);
-    var selectedCar;
+
 
     // false condition code runs on first run
     if(isUpdate) {
@@ -64,7 +65,8 @@ function updateCarModelSelection(data, isUpdate = true) {
 
         // TODO update view here
         selectedCar = carModelDataFilter(filteredData);
-        //console.log(selectedCar);
+        showCostnCO2(selectedCar);
+        console.log(selectedCar);
     }
     else {
         d3.select("#vehicleModel").selectAll("option").data(modelKeys).enter().append("option")
@@ -78,7 +80,8 @@ function updateCarModelSelection(data, isUpdate = true) {
 
         // TODO update view here
         selectedCar = carModelDataFilter(filteredData);
-        //console.log(selectedCar);
+        showCostnCO2(selectedCar);
+        console.log(selectedCar);
     });
 
     return selectedCar;
@@ -106,4 +109,12 @@ function carModelDataFilter(data) {
 
     data = data.filter(function(d) { return d.MODEL  == model;});
     return data;
+}
+
+
+function showCostnCO2(data) {
+    var COEmision = data[0].COE * totalLength * 2 * 200 / 1000; //in grams
+    var Cost = data[0].FCCOMB * totalLength/100 * 2 * 200 * 1.15; //in dollar
+    document.getElementById("co2-emission").innerHTML = COEmision.toFixed(1);
+    document.getElementById("cost").innerHTML = Cost.toFixed(2);
 }
