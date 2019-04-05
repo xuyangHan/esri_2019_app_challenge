@@ -105,11 +105,24 @@ require([
     // *************************************
     var drawHomeButton = document.getElementById("homeButton");
     drawHomeButton.onclick = function () {
-        view.graphics.removeAll();
         // add the graphic to the graphics layer
         sketchVHomeM.create("point");
         document.getElementById("homeButton").disabled = true;
+        view.on("click", function (event) {
+            if (view.graphics.length === 0) {
+                addGraphic("start", event.mapPoint);
+            } else if (view.graphics.length === 1) {
+                addGraphic("finish", event.mapPoint);
+                // Call the route service
+                getRoute();
+            } else {
+                view.graphics.removeAll();
+                addGraphic("start", event.mapPoint);
+            }
+        });
     };
+
+
     // *************************************
     // activate the sketch to create a dest point
     // *************************************
@@ -117,6 +130,18 @@ require([
     drawDestButton.onclick = function () {
         sketchVDestM.create("point");
         document.getElementById("destButton").disabled = true;
+        view.on("click", function (event) {
+            if (view.graphics.length === 0) {
+                addGraphic("start", event.mapPoint);
+            } else if (view.graphics.length === 1) {
+                addGraphic("finish", event.mapPoint);
+                // Call the route service
+                getRoute();
+            } else {
+                view.graphics.removeAll();
+                addGraphic("start", event.mapPoint);
+            }
+        });
     };
 
     document.getElementById("ResetBtn").onclick = function () {
@@ -137,26 +162,9 @@ require([
         url: "https://utility.arcgis.com/usrsvcs/appservices/TDWzWsvWrqyvJH5i/rest/services/World/Route/NAServer/Route_World/solve"
     });
 
-    view.on("click", function (event) {
-        if (view.graphics.length === 0) {
-            addGraphic("start", event.mapPoint);
-        } else if (view.graphics.length === 1) {
-            addGraphic("finish", event.mapPoint);
-            // Call the route service
-            getRoute();
-        } else {
-            view.graphics.removeAll();
-            addGraphic("start", event.mapPoint);
-        }
-    });
 
     function addGraphic(type, point) {
         var graphic = new Graphic({
-            symbol: {
-                type: "simple-marker",
-                color: (type === "start") ? "white" : "black",
-                size: "8px"
-            },
             geometry: point
         });
         view.graphics.add(graphic);
