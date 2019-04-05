@@ -15,7 +15,7 @@ require([
     "esri/widgets/Sketch/SketchViewModel",
     "esri/layers/GraphicsLayer",
 ], function (Map, MapView, Graphic, RouteTask, RouteParameters, FeatureSet, Home, Locate, Search, BasemapToggle,
-             SketchViewModel, GraphicsLayer) {
+    SketchViewModel, GraphicsLayer) {
     loadCSV();
 
     // GraphicsLayer to hold graphics created via sketch view model
@@ -41,9 +41,11 @@ require([
     view.ui.add(homeWidget, "top-left");
 
     var locateWidget = new Locate({
-        view: view,   // Attaches the Locate button to the view
+        view: view, // Attaches the Locate button to the view
         graphic: new Graphic({
-            symbol: {type: "simple-marker"}  // overwrites the default symbol used for the
+            symbol: {
+                type: "simple-marker"
+            } // overwrites the default symbol used for the
             // graphic placed at the location of the user when found
         })
     });
@@ -71,7 +73,7 @@ require([
         layer: tempGraphicsLayer,
         view: view,
         pointSymbol: { // symbol used for points
-            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+            type: "picture-marker", // autocasts as new PictureMarkerSymbol()
             url: "static/Imgs/home-solid.png",
             width: "20px",
             height: "20px"
@@ -82,7 +84,7 @@ require([
         layer: tempGraphicsLayer2,
         view: view,
         pointSymbol: { // symbol used for points
-            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+            type: "picture-marker", // autocasts as new PictureMarkerSymbol()
             url: "static/Imgs/map-pin-solid.png",
             width: "10px",
             height: "20px"
@@ -166,11 +168,9 @@ require([
     function getRoute() {
         // Setup the route parameters
         var routeParams = new RouteParameters({
-            stops: new FeatureSet(
-                {
-                    features: view.graphics.toArray()
-                }
-            ),
+            stops: new FeatureSet({
+                features: view.graphics.toArray()
+            }),
             returnDirections: true
         });
         // Get the route

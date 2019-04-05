@@ -19,7 +19,7 @@ require([
     "esri/geometry/geometryEngine",
     "dojo/domReady!"
 ], function (Map, MapView, Graphic, RouteTask, RouteParameters, FeatureSet, Home, Locate, Search, BasemapToggle,
-             SketchViewModel, GraphicsLayer, FeatureLayer, Circle, geometryEngine) {
+    SketchViewModel, GraphicsLayer, FeatureLayer, Circle, geometryEngine) {
     loadCSV();
 
     // GraphicsLayer to hold graphics created via sketch view model
@@ -39,10 +39,10 @@ require([
     });
 
     var featureLayer = new FeatureLayer({
-            url: "https://services.arcgis.com/4TKcmj8FHh5Vtobt/arcgis/rest/services/Carpool_DataSheet/FeatureServer/0",
-            outFields: ["*"],
-            visible: true
-        });
+        url: "https://services.arcgis.com/4TKcmj8FHh5Vtobt/arcgis/rest/services/Carpool_DataSheet/FeatureServer/0",
+        outFields: ["*"],
+        visible: true
+    });
 
     map.add(featureLayer);
 
@@ -53,9 +53,11 @@ require([
     view.ui.add(homeWidget, "top-left");
 
     var locateWidget = new Locate({
-        view: view,   // Attaches the Locate button to the view
+        view: view, // Attaches the Locate button to the view
         graphic: new Graphic({
-            symbol: {type: "simple-marker"}  // overwrites the default symbol used for the
+            symbol: {
+                type: "simple-marker"
+            } // overwrites the default symbol used for the
             // graphic placed at the location of the user when found
         })
     });
@@ -83,7 +85,7 @@ require([
         layer: tempGraphicsLayer,
         view: view,
         pointSymbol: { // symbol used for points
-            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+            type: "picture-marker", // autocasts as new PictureMarkerSymbol()
             url: "static/Imgs/home-solid.png",
             width: "20px",
             height: "20px"
@@ -94,7 +96,7 @@ require([
         layer: tempGraphicsLayer2,
         view: view,
         pointSymbol: { // symbol used for points
-            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+            type: "picture-marker", // autocasts as new PictureMarkerSymbol()
             url: "static/Imgs/map-pin-solid.png",
             width: "10px",
             height: "20px"
@@ -210,18 +212,16 @@ require([
         });
         view.graphics.add(graphic);
         console.log(view.graphics.length);
-        if(view.graphics.length === 2)
+        if (view.graphics.length === 2)
             getRoute();
     }
 
     function getRoute() {
         // Setup the route parameters
         var routeParams = new RouteParameters({
-            stops: new FeatureSet(
-                {
-                    features: view.graphics.toArray()
-                }
-            ),
+            stops: new FeatureSet({
+                features: view.graphics.toArray()
+            }),
             returnDirections: true
         });
         // Get the route
@@ -256,16 +256,16 @@ require([
         attributes["Name"] = name;
         attributes["Email"] = email;
 
-        const addFeature =  new Graphic({
+        const addFeature = new Graphic({
             geometry: point,
             attributes: attributes
         });
 
         featureLayer.applyEdits({
             addFeatures: [addFeature]
-        }).then( function(result) {
+        }).then(function (result) {
             console.log("projected points: ", result);
-        }).catch( function(error) {
+        }).catch(function (error) {
             console.error("Error while adding feature: ", error);
         });
     }
@@ -285,11 +285,10 @@ require([
         var longitude;
 
         view.graphics.forEach(function (graphic) {
-            if(graphic.attributes["name"] == "destination") {
+            if (graphic.attributes["name"] == "destination") {
                 point = graphic.geometry;
                 console.log("Found Destination", point);
-            }
-            else if (graphic.attributes["name"] == "home") {
+            } else if (graphic.attributes["name"] == "home") {
                 latitude = graphic.geometry.x;
                 longitude = graphic.geometry.y;
                 console.log("Found Home", latitude, longitude);
@@ -302,7 +301,7 @@ require([
         addFeature(point, year, make, model, latitude, longitude, name.value, email.value);
     }
 
-    function queryFeatureLayer(graphicGeometryHome){
+    function queryFeatureLayer(graphicGeometryHome) {
         /*
         // query all features from the featureLayer layer
         view
@@ -327,16 +326,16 @@ require([
         }*/
 
         function queryForFeatureGeometries() {
-          var featureQuery = featureLayer.createQuery();
+            var featureQuery = featureLayer.createQuery();
 
-          return featureLayer.queryFeatures(featureQuery).then(function(response) {
-            var featuresGeometry = response.features.map(function(feature) {
-                var mapPoint = new MapPoint(feature.attributes.Latitude, feature.attributes.Longitude);
-                return mapPoint;
+            return featureLayer.queryFeatures(featureQuery).then(function (response) {
+                var featuresGeometry = response.features.map(function (feature) {
+                    var mapPoint = new MapPoint(feature.attributes.Latitude, feature.attributes.Longitude);
+                    return mapPoint;
+                });
+
+                return featuresGeometry;
             });
-
-            return featuresGeometry;
-          });
         }
 
 
@@ -348,18 +347,17 @@ require([
     }
 
     function findCarPoolArroundMe() {
-        var homeBufferDist = 1000;//parseInt(distanceSlider.value);
+        var homeBufferDist = 1000; //parseInt(distanceSlider.value);
         //console.log(homeBufferDist);
         //var isMiles = true;
 
         var graphicGeometryHome;
         var graphicGeometryDest;
         view.graphics.forEach(function (graphic) {
-            if(graphic.attributes["name"] == "destination") {
+            if (graphic.attributes["name"] == "destination") {
                 graphicGeometryDest = graphic.geometry;
                 //console.log("Found Destination");
-            }
-            else if (graphic.attributes["name"] == "home") {
+            } else if (graphic.attributes["name"] == "home") {
                 graphicGeometryHome = graphic.geometry;
                 //console.log("Found Home");
             }
@@ -420,12 +418,12 @@ require([
         var bufferGraphic = new Graphic({
             geometry: sourceBuffers, // TODO to be filled
             symbol: {
-              type: "simple-fill", // autocasts as new SimpleFillSymbol()
-              outline: {
-                width: 1.5,
-                color: [255, 128, 0, 0.5]
-              },
-              style: "none"
+                type: "simple-fill", // autocasts as new SimpleFillSymbol()
+                outline: {
+                    width: 1.5,
+                    color: [255, 128, 0, 0.5]
+                },
+                style: "none"
             }
         });
         //view.graphics.removeAll();
@@ -436,26 +434,26 @@ require([
         featureLayer.queryFeatures(featureQuery).then(selectInBuffer);
     }
 
-    function selectInBuffer(response){
-      var feature;
-      var features = response.features;
-      var inBuffer = [];
-      console.log(features);
-      //filter out features that are not actually in buffer, since we got all points in the buffer's bounding box
-      for (var i = 0; i < features.length; i++) {
-        feature = features[i];
-        if(circle.contains(feature.geometry)){
-          inBuffer.push(feature.attributes[featureLayer.objectIdField]);
+    function selectInBuffer(response) {
+        var feature;
+        var features = response.features;
+        var inBuffer = [];
+        console.log(features);
+        //filter out features that are not actually in buffer, since we got all points in the buffer's bounding box
+        for (var i = 0; i < features.length; i++) {
+            feature = features[i];
+            if (circle.contains(feature.geometry)) {
+                inBuffer.push(feature.attributes[featureLayer.objectIdField]);
+            }
         }
-      }
-      console.log("In Buffer" , inBuffer.length);
-      var query = new Query();
-      query.objectIds = inBuffer;
-      //use a fast objectIds selection query (should not need to go to the server)
-      featureLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, function(results){
-        results.forEach(function (result) {
-            console.log(result.attributes.Car_Make);
-        })
-      });
+        console.log("In Buffer", inBuffer.length);
+        var query = new Query();
+        query.objectIds = inBuffer;
+        //use a fast objectIds selection query (should not need to go to the server)
+        featureLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, function (results) {
+            results.forEach(function (result) {
+                console.log(result.attributes.Car_Make);
+            })
+        });
     }
 });
