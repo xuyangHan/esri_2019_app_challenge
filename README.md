@@ -53,7 +53,7 @@ Our application was created using the ArcGIS API for JavaScript. The app have th
 ### 1) Get Route Info
 Route information will be provided to the user after users input. Users can set home and destination and select car by
 year, make and model. The route will be generated automatically and associated values about the route will present,
- including distance, driving time needed, CO2 emissions and Cost.
+ including distance, driving time needed, CO<sub>2</sub> emissions and Cost.
 
 
 ### 2) Query available Carpooling
@@ -75,8 +75,8 @@ Data of fuel consumption ratings, fuel price and other facts data are from Stati
 
 ## Calculations & Explanations
 
-### CO2 Emissions Estimation
-Annual CO2 Emissions by a specific car(kg) = COE(kg/km) x Distance(km) x 2 x 200.
+### CO<sub>2</sub> Emissions Estimation
+Annual CO<sub>2</sub> Emissions by a specific car(kg) = COE(kg/km) x Distance(km) x 2 x 200.
 
 COE represents the tailpipe emissions of the specific car model of carbon dioxide for combined city and highway driving.
 
@@ -118,7 +118,7 @@ User profile and permission utilities are not developed yet.
 * User permissions. Users will have permissions to change the data records they
                                         submitted.
 * User records. Users will know how much contributions is done
-                                        towards environment in saving Fuel, CO2 emissions and Costs.
+                                        towards environment in saving Fuel, CO<sub>2</sub> emissions and Costs.
 * More comprehensive vehicle information and support calculation for more than 2
                                         people sharing the route.
 
