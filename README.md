@@ -15,7 +15,7 @@ To deploy this app locally, please just download the folder then start with inde
 
 ## Video Submission
 
-<a href="https://www.youtube.com/watch?v=Jv5jDxev2qE" target="_blank">Way2Share Video Submission</a>
+<a href="https://www.youtube.com/watch?v=icI-AGLyjCg" target="_blank">Way2Share Video Submission</a>
 
 
 ## Mission Statement
